@@ -27,7 +27,6 @@ public class BinarySearch {
             if(nums[mid]<target){
                 left=mid+1;
             }
-            //System.out.println("right:"+right+"left:"+left);
         }
         return -1;
     }
