@@ -27,9 +27,23 @@ public class MergeTwoBinaryTrees {
 
     public static void main(String[] args) {
 
+        TreeNode root1right=new TreeNode(2,null,null);
+        TreeNode root1leftleft=new TreeNode(5,null,null);
+        TreeNode root1left =new TreeNode(3,root1leftleft,null);
+        TreeNode root1=new TreeNode(1,root1left,root1right);
+
+        TreeNode root2rightright=new TreeNode(7,null,null);
+        TreeNode root2right=new TreeNode(3,null,root2rightright);
+        TreeNode root2leftright=new TreeNode(4,null,null);
+        TreeNode root2left=new TreeNode(1,null,root2leftright);
+        TreeNode root2=new TreeNode(2,root2left,root2right);
+
+        TreeNode root=mergeTrees(root1,root2);
+        System.out.println(root.left.val);
+
     }
 
-    public static TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+    public static TreeNode mergeTreesWithoutDiGui(TreeNode root1, TreeNode root2) {
 
         if(root1==null){
             return root2;
@@ -40,20 +54,65 @@ public class MergeTwoBinaryTrees {
 
         Stack<TreeNode> node1 = new Stack<>();
         Stack<TreeNode> node2 = new Stack<>();
+
         node1.push(root1);
         node2.push(root2);
         root1.val=root1.val+root2.val;
         while (!node1.isEmpty()&&!node2.isEmpty()) {
             TreeNode r1=node1.pop();
             TreeNode r2=node2.pop();
+            
+            if (r1.left!=null||r2.left!=null){
+                if (r1.left!=null&&r2.left!=null){
+                    r1.val+=r2.val;
+                    r1=r1.left;
+                    r2=r2.left;
+                }
+                else if(r1.left!=null){
+                    r1=r1.left;
+                }
+                else {
+                    r1.val=r2.val;
+                    r2=r2.left;
+                }
+            }
 
-            TreeNode zero =new TreeNode();
-            zero.val=0;
+            if (r1.right!=null||r2.right!=null){
+                if (r1.right!=null&&r2.right!=null){
+                    r1.val+=r2.val;
+                    r1=r1.right;
+                    r2=r2.right;
+                }
+                else if(r1.right!=null){
+                    r1=r1.right;
+                }
+                else {
+                    r1.val=r2.val;
+                    r2=r2.right;
+                }
+            }
 
-            if (r1.left!=null)
+            node1.push(r1);
+            node2.push(r2);
 
         }
         return root1;
+    }
+
+    public static TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+
+        if (root1==null) {
+            return root2;
+        }
+        if (root2==null) {
+            return root1;
+        }
+
+        TreeNode merge=new TreeNode(root1.val+root2.val);
+        merge.left=mergeTrees(root1.left,root2.left);
+        merge.right=mergeTrees(root1.right,root2.right);
+        return merge;
+
     }
 
 }
