@@ -8,7 +8,7 @@ import java.util.Queue;
  * 给定一个由 0 和 1 组成的矩阵 mat，请输出一个大小相同的矩阵，其中每一个格子是 mat 中对应位置元素到最近的 0 的距离。
  * 两个相邻元素间的距离为 1 。
  */
-public class Matrix {
+public class Matrix1 {
 
     public static void main(String[] args) {
         int m=3;
@@ -33,46 +33,39 @@ public class Matrix {
     }
 
     public static int[][] updateMatrix(int[][] mat) {
-        int m= mat.length; //多少行
-        int n=mat[0].length; //多少列
-        int [][]res=mat;
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (mat[i][j] != 0) {
-                    res[i][j] = searchLength(mat,i,j);
-                }
-            }
-        }
-        return res;
-    }
 
-    public static int searchLength(int [][]mat,int x,int y){
-        System.out.println("X:"+x+"Y:"+y);
-        int length=100;
         int m= mat.length; //多少行
         int n=mat[0].length; //多少列
         int []dx={0,0,1,-1};
         int []dy={1,-1,0,0};
+        int [][]res=mat;
+        boolean [][]isFlag=new boolean[m][n];
         Queue<int[]> que=new LinkedList<>();
-        que.add(new int[]{x,y});
-
-        while (!que.isEmpty()){
-            int []cell=que.poll();
-            for (int i = 0; i < 4; i++) {
-                int temp=1;
-                int mx=cell[0]+dx[i];
-                int my=cell[1]+dy[i];
-                if(mx>=0&&mx<m&&my>=0&&my<n){
-                    if(mat[mx][my]==0) break;
-                    else {
-                        que.add(new int[] {mx,my});
-                        temp++;
-                    }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (mat[i][j] == 0) {
+                    isFlag[i][j] = true;
+                    que.add(new int[]{i,j});
                 }
-                length=Math.min(length,temp);
+                else {
+                    mat[i][j] = -1;
+                }
             }
-
         }
-        return length;
+
+        while (!que.isEmpty()) {
+            int []cell= que.poll();
+            int x=cell[0];
+            int y=cell[1];
+            for (int i = 0; i < 4; i++) {
+                int mx=dx[i]+x;
+                int my = dy[i] + y;
+                if(mx>=0&&mx<m&&my>=0&&my<n&&mat[mx][my]==-1){
+                    res[mx][my] = mat[x][y]+1;
+                    que.add(new int[]{mx,my});
+                }
+            }
+        }
+        return res;
     }
 }
