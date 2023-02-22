@@ -1,3 +1,4 @@
+
 /**
  * @author zlf
  * @data 2023/2/17
@@ -24,3 +25,4 @@ public class Largest1BorderedSquare {
         return num;
     }
 }
+
